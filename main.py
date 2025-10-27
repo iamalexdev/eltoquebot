@@ -58,9 +58,6 @@ def formatear_mensaje_tasas(datos_api: Dict) -> str:
     minutos_utc = datos_api.get('minutes', 0)
     segundos_utc = datos_api.get('seconds', 0)
     
-    # Convertir a hora de Cuba
-    hora_cuba = convertir_a_hora_cuba(hora_utc, minutos_utc, segundos_utc)
-    
     # Crear mensaje formateado
     mensaje = "💹 *TASAS DE CAMBIO ACTUALIZADAS* 💹\n\n"
     mensaje += "📊 *Tasas disponibles:*\n"

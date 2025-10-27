@@ -140,7 +140,6 @@ def comando_start(message):
 ✅ Tasas via eltoque.com
 ✅ Tasas actualizadas diariamente a las 7:00 AM
 ✅ Acceso controlado por grupos
-✅ Imagen personalizable del TRMI
 
 🚀 *¡Usa /tasas para ver las tasas del día!*
 🖼️ *¡Usa /imagen para obtener la imagen del TRMI!*

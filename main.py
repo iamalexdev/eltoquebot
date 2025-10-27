@@ -106,9 +106,10 @@ def comando_start(message):
 ✅ Tasas via eltoque.com
 ✅ Actualizaciones frecuentes
 ✅ Acceso controlado por grupos
-_By_ *Alex Gonzalez*
 
 🚀 *¡Usa /tasas para ver las tasas ahora!*
+
+_By Alex Gonzalez_
     """
     bot.reply_to(message, welcome_text, parse_mode='Markdown')
 

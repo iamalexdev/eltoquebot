@@ -158,7 +158,7 @@ def comando_imagen(message):
             return
     
     # URL de la imagen del TRMI
-    imagen_url = "https://github.com/iamalexdev/eltoquebot/blob/main/trmi.png"
+    imagen_url = "https://t.me/abcdefghijkllllls/2"
     
     # Mensaje de respuesta
     mensaje_respuesta = "🖼️ ¡Por supuesto! Aquí tienes tu imagen del TRMI:"

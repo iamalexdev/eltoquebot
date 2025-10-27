@@ -195,6 +195,7 @@ def comando_imagen(message):
 
 @bot.message_handler(commands=['link'])
 def comando_link(message):
+    global IMAGEN_PERSONALIZADA_URL  # Declarar como global aquí
     # Verificar autorización para grupos
     if message.chat.type in ['group', 'supergroup']:
         if not es_grupo_autorizado(message.chat.id):

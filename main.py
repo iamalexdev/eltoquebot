@@ -13,7 +13,7 @@ API_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MT
 GRUPOS_AUTORIZADOS = [-1003226018534]
 
 # Tu user ID como administrador
-ADMIN_ID = 1853800972  # Cambia esto por tu user ID real
+ADMIN_ID = 1853800972
 
 # Variable para almacenar la URL de la imagen
 imagen_url = None
@@ -22,20 +22,20 @@ bot = telebot.TeleBot(TOKEN)
 
 def obtener_tasas_eltoque() -> Dict:
     """
-    Obtiene las tasas actuales desde la API de ElToque (últimas 24 horas)
+    Obtiene las tasas actuales desde la API de ElToque (rango del día completo)
     """
     try:
         # Obtener hora actual en Cuba
         cuba_tz = pytz.timezone('America/Havana')
         ahora_cuba = datetime.now(cuba_tz)
         
-        # Calcular rango de 24 horas
-        fecha_hasta = ahora_cuba
-        fecha_desde = ahora_cuba - timedelta(hours=24)
+        # Calcular inicio y fin del día actual en Cuba
+        inicio_dia = ahora_cuba.replace(hour=0, minute=0, second=1, microsecond=0)
+        fin_dia = ahora_cuba.replace(hour=23, minute=59, second=1, microsecond=0)
         
         # Formatear fechas para la API
-        date_from = fecha_desde.strftime("%Y-%m-%d %H:%M:%S").replace(" ", "%20")
-        date_to = fecha_hasta.strftime("%Y-%m-%d %H:%M:%S").replace(" ", "%20")
+        date_from = inicio_dia.strftime("%Y-%m-%d %H:%M:%S").replace(" ", "%20")
+        date_to = fin_dia.strftime("%Y-%m-%d %H:%M:%S").replace(" ", "%20")
         
         url = f"https://tasas.eltoque.com/v1/trmi?date_from={date_from}&date_to={date_to}"
         
@@ -44,10 +44,19 @@ def obtener_tasas_eltoque() -> Dict:
             'Authorization': f'Bearer {API_TOKEN}'
         }
         
+        print(f"🔍 Consultando API para el día completo:")
+        print(f"   Desde: {inicio_dia.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"   Hasta: {fin_dia.strftime('%Y-%m-%d %H:%M:%S')}")
+        
         response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
         
-        return response.json()
+        datos = response.json()
+        print(f"✅ Datos obtenidos correctamente")
+        print(f"   Fecha en datos: {datos.get('date')}")
+        print(f"   Hora en datos: {datos.get('hour')}:{datos.get('minutes')}:{datos.get('seconds')}")
+        
+        return datos
         
     except Exception as e:
         print(f"❌ Error al obtener tasas: {e}")
@@ -65,6 +74,11 @@ def formatear_mensaje_tasas(datos_api: Dict) -> str:
     hora_utc = datos_api.get('hour', 0)
     minutos_utc = datos_api.get('minutes', 0)
     segundos_utc = datos_api.get('seconds', 0)
+    
+    # Obtener fecha actual para mostrar en el mensaje
+    cuba_tz = pytz.timezone('America/Havana')
+    ahora_cuba = datetime.now(cuba_tz)
+    fecha_actual = ahora_cuba.strftime("%d/%m/%Y")
     
     mensaje = "💹 *TASAS DEL DÍA*\n\n"
     mensaje += "📊 *Tasas disponibles:*\n"
@@ -84,9 +98,9 @@ def formatear_mensaje_tasas(datos_api: Dict) -> str:
             mensaje += f"│ *{nombre}:* `{valor}` CUP\n"
     
     mensaje += "└───────────────────────┘\n\n"
-    mensaje += f"📅 *Fecha:* `{fecha}`\n"
-    mensaje += f"🕒 *Hora de Actualización:* `{hora_utc:02d}:{minutos_utc:02d}:{segundos_utc:02d}`\n\n"
-    mensaje += "📢 *Actualizado diariamente a las 7:00 AM*\n"
+    mensaje += f"📅 *Fecha:* `{fecha_actual}`\n"
+    mensaje += f"🕒 *Hora de Consulta:* `{hora_utc:02d}:{minutos_utc:02d}:{segundos_utc:02d}`\n\n"
+    mensaje += "📢 *Consulta del día completo (00:00:01 - 23:59:01)*\n"
     mensaje += "💡 _Datos proporcionados por eltoque.com_"
     
     return mensaje

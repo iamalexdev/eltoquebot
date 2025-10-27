@@ -45,30 +45,6 @@ def obtener_tasas_eltoque() -> Dict:
         print(f"Error al obtener tasas: {e}")
         return None
 
-def convertir_a_hora_cuba(utc_hour: int, utc_minutes: int, utc_seconds: int) -> str:
-    """
-    Convierte hora UTC a hora de Cuba (Cuba Standard Time - UTC-5)
-    """
-    try:
-        # Crear objeto datetime en UTC
-        utc_time = datetime.utcnow().replace(
-            hour=utc_hour, 
-            minute=utc_minutes, 
-            second=utc_seconds
-        )
-        
-        # Definir timezone de Cuba (normalmente UTC-5, puede variar con horario de verano)
-        cuba_tz = pytz.timezone('America/Havana')
-        
-        # Asumir que la hora de la API es UTC y convertir a Cuba
-        utc_time = pytz.utc.localize(utc_time)
-        cuba_time = utc_time.astimezone(cuba_tz)
-        
-        return cuba_time.strftime("%H:%M:%S")
-    except Exception as e:
-        print(f"Error en conversión horaria: {e}")
-        return f"{utc_hour}:{utc_minutes}:{utc_seconds} (UTC)"
-
 def formatear_mensaje_tasas(datos_api: Dict) -> str:
     """
     Formatea un mensaje atractivo con las tasas
@@ -92,23 +68,23 @@ def formatear_mensaje_tasas(datos_api: Dict) -> str:
     
     # Lista de tasas en orden específico
     tasas_ordenadas = [
+        ("ECU", "💶 EUR"),
         ("USD", "💵USD"),
-        ("USDT_TRC20", "🔷 USDT"),
         ("MLC", "💳 MLC"),
+        ("USDT_TRC20", "🔷 USDT"),
         ("BTC", "₿ BTC"),
-        ("ECU", "🇨🇺 EUR"),
         ("TRX", "⚡ TRX")
     ]
     
     for codigo, nombre in tasas_ordenadas:
         if codigo in tasas:
             valor = tasas[codigo]
-            mensaje += f"│ *{nombre}:* {valor} CUP │\n"
+            mensaje += f"│ *{nombre}:*   `{valor}` *CUP* \n"
     
     mensaje += "└───────────────────────┘\n\n"
     mensaje += f"📅 *Fecha:* {fecha}\n"
     mensaje += f"⏰ *Hora de Actualización:* {hora_utc:02d}:{minutos_utc:02d}:{segundos_utc:02d}\n\n"
-    mensaje += "💡 _Datos proporcionados por ElToque_"
+    mensaje += "💡 _Datos proporcionados por eltoque.com_"
     
     return mensaje
 
@@ -127,17 +103,21 @@ def comando_start(message):
             return
     
     welcome_text = """
-🤖 *Bot de Tasas de Cambio*
+welcome_text = """
+💹 *BOT DE TASAS DE CAMBIO* 🤖
 
-*Comandos disponibles:*
-/tasas - Muestra las tasas de cambio actuales
-/grupos - Información sobre grupos autorizados
-/help - Muestra esta ayuda
+*🎮 COMANDOS PRINCIPALES:*
+📊 /tasas - Consultar tasas actualizadas
+👥 /grupos - Información de grupos
+🆘 /help - Centro de ayuda
 
-*Funcionalidades:*
-• Tasas en tiempo real desde ElToque
-• Conversión automática a hora de Cuba
-• Formato interactivo y fácil de leer
+*✨ FUNCIONALIDADES:*
+✅ Tasas en tiempo real desde ElToque
+✅ Actualizaciones frecuentes
+✅ Acceso controlado por grupos
+
+🚀 *¡Usa /tasas para ver las tasas ahora!*
+"""
     """
     bot.reply_to(message, welcome_text, parse_mode='Markdown')
 

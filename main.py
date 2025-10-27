@@ -23,7 +23,7 @@ def obtener_tasas_eltoque() -> Dict:
     try:
         # Preparar fechas (últimas 24 horas)
         fecha_actual = datetime.now()
-        fecha_desde = fecha_actual - timedelta(hours=24)
+        fecha_desde = fecha_actual - timedelta(minutes=1)
         
         # Formatear fechas para la API
         date_from = fecha_desde.strftime("%Y-%m-%d %H:%M:%S").replace(" ", "%20")

@@ -66,7 +66,7 @@ def formatear_mensaje_tasas(datos_api: Dict) -> str:
     # Lista de tasas en orden específico
     tasas_ordenadas = [
         ("ECU", "💶 EUR"),
-        ("USD", "💵USD"),
+        ("USD", "💵 USD"),
         ("MLC", "💳 MLC"),
         ("USDT_TRC20", "🔷 USDT"),
         ("TRX", "⚡ TRX")
@@ -102,7 +102,7 @@ def comando_start(message):
 💹 *BOT DE TASAS DE CAMBIO* 🤖
 
 *✨ FUNCIONALIDADES:*
-✅ Tasas en tiempo real desde ElToque
+✅ Tasas via eltoque.com
 ✅ Actualizaciones frecuentes
 ✅ Acceso controlado por grupos
 

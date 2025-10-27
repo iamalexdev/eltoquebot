@@ -75,7 +75,7 @@ def formatear_mensaje_tasas(datos_api: Dict) -> str:
     for codigo, nombre in tasas_ordenadas:
         if codigo in tasas:
             valor = tasas[codigo]
-            mensaje += f"│ *{nombre}:*   `{valor}` *CUP* \n"
+            mensaje += f"│ *{nombre}:* -- `{valor}` *CUP* \n"
     
     mensaje += "└───────────────────────┘\n\n"
     mensaje += f"📅 *Fecha:* {fecha}\n"
@@ -105,6 +105,7 @@ def comando_start(message):
 ✅ Tasas via eltoque.com
 ✅ Actualizaciones frecuentes
 ✅ Acceso controlado por grupos
+By */Alex Gonzalez/*
 
 🚀 *¡Usa /tasas para ver las tasas ahora!*
     """

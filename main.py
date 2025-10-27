@@ -102,10 +102,11 @@ def comando_start(message):
 💹 *BOT DE TASAS DE CAMBIO* 🤖
 
 *✨ FUNCIONALIDADES:*
+
 ✅ Tasas via eltoque.com
 ✅ Actualizaciones frecuentes
 ✅ Acceso controlado por grupos
-By */Alex Gonzalez/*
+_By_ *Alex Gonzalez*
 
 🚀 *¡Usa /tasas para ver las tasas ahora!*
     """
@@ -134,6 +135,7 @@ def comando_grupos(message):
         info_grupos = """
        
 *Para agregar el bot a tu grupo:*
+
 1. Añade @elToqueP_bot como administrador
 2. Asegúrate de que tenga permisos para enviar mensajes
 3. El bot debe estar en la lista de grupos autorizados

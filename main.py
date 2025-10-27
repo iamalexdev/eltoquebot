@@ -59,7 +59,7 @@ def formatear_mensaje_tasas(datos_api: Dict) -> str:
     segundos_utc = datos_api.get('seconds', 0)
     
     # Crear mensaje formateado
-    mensaje = "💹 *TASAS DE CAMBIO ACTUALIZADAS* 💹\n\n"
+    mensaje = "💹 *TASAS DE ACTUALIZADAS*\n\n"
     mensaje += "📊 *Tasas disponibles:*\n"
     mensaje += "┌───────────────────────┐\n"
     
@@ -101,11 +101,6 @@ def comando_start(message):
     welcome_text = """
 💹 *BOT DE TASAS DE CAMBIO* 🤖
 
-*🎮 COMANDOS PRINCIPALES:*
-📊 /tasas - Consultar tasas actualizadas
-👥 /grupos - Información de grupos
-🆘 /help - Centro de ayuda
-
 *✨ FUNCIONALIDADES:*
 ✅ Tasas en tiempo real desde ElToque
 ✅ Actualizaciones frecuentes
@@ -132,15 +127,11 @@ def comando_tasas(message):
     
     bot.reply_to(message, mensaje, parse_mode='Markdown')
 
-@bot.message_handler(commands=['grupos'])
+@bot.message_handler(commands=['agregar'])
 def comando_grupos(message):
     if message.chat.type == 'private':
         info_grupos = """
-👥 *Grupos Autorizados:*
-
-El bot puede ser agregado a los siguientes grupos:
-{}
-        
+       
 *Para agregar el bot a tu grupo:*
 1. Añade @{} como administrador
 2. Asegúrate de que tenga permisos para enviar mensajes
@@ -163,7 +154,7 @@ def comando_help(message):
 *Comandos disponibles:*
 /start - Iniciar el bot
 /tasas - Obtener tasas de cambio actuales
-/grupos - Información sobre grupos autorizados
+/agregar - Agregalo a tu grupo
 /help - Mostrar esta ayuda
 
 *Características:*

@@ -1,6 +1,6 @@
 import telebot
 import requests
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 import pytz
 from typing import Dict, List
 
@@ -18,15 +18,16 @@ bot = telebot.TeleBot(TOKEN)
 
 def obtener_tasas_eltoque() -> Dict:
     """
-    Obtiene las tasas actuales desde la API de ElToque (últimos 5 minutos)
+    Obtiene las tasas actuales desde la API de ElToque (últimos 5 minutos en hora de Cuba)
     """
     try:
-        # Obtener hora actual con timezone awareness
-        ahora = datetime.now(timezone.utc)
+        # Obtener hora actual en Cuba (GMT-4)
+        cuba_tz = pytz.timezone('America/Havana')
+        ahora_cuba = datetime.now(cuba_tz)
         
-        # Calcular rango de 5 minutos (desde 5 minutos antes hasta 1 minuto antes)
-        fecha_hasta = ahora - timedelta(minutes=1)  # Hasta 1 minuto antes
-        fecha_desde = ahora - timedelta(minutes=5)  # Desde 5 minutos antes
+        # Calcular rango de 5 minutos (desde 5 minutos antes hasta 1 minuto antes) en hora Cuba
+        fecha_hasta = ahora_cuba - timedelta(minutes=1)  # Hasta 1 minuto antes
+        fecha_desde = ahora_cuba - timedelta(minutes=5)  # Desde 5 minutos antes
         
         # Formatear fechas para la API
         date_from = fecha_desde.strftime("%Y-%m-%d %H:%M:%S").replace(" ", "%20")
@@ -39,7 +40,8 @@ def obtener_tasas_eltoque() -> Dict:
             'Authorization': f'Bearer {API_TOKEN}'
         }
         
-        print(f"🔍 Consultando API:")
+        print(f"🔍 Consultando API con hora Cuba:")
+        print(f"   Hora actual Cuba: {ahora_cuba.strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"   Desde: {fecha_desde.strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"   Hasta: {fecha_hasta.strftime('%Y-%m-%d %H:%M:%S')}")
         
@@ -60,38 +62,6 @@ def obtener_tasas_eltoque() -> Dict:
         print(f"❌ Error inesperado: {e}")
         return None
 
-def convertir_a_hora_cuba(utc_hour: int, utc_minutes: int, utc_seconds: int) -> str:
-    """
-    Convierte hora UTC a hora de Cuba (Cuba Standard Time - UTC-5)
-    """
-    try:
-        # Obtener la fecha y hora actual en UTC (timezone-aware)
-        ahora_utc = datetime.now(timezone.utc)
-        
-        # Crear objeto datetime en UTC con la hora específica
-        utc_time = ahora_utc.replace(
-            hour=utc_hour, 
-            minute=utc_minutes, 
-            second=utc_seconds,
-            microsecond=0
-        )
-        
-        # Asegurarnos de que tiene timezone UTC
-        if utc_time.tzinfo is None:
-            utc_time = utc_time.replace(tzinfo=timezone.utc)
-        
-        # Definir timezone de Cuba
-        cuba_tz = pytz.timezone('America/Havana')
-        
-        # Convertir UTC a hora de Cuba
-        cuba_time = utc_time.astimezone(cuba_tz)
-        
-        return cuba_time.strftime("%H:%M:%S")
-        
-    except Exception as e:
-        print(f"⚠️ Error en conversión horaria: {e}")
-        return f"{utc_hour:02d}:{utc_minutes:02d}:{utc_seconds:02d} (UTC)"
-
 def formatear_mensaje_tasas(datos_api: Dict) -> str:
     """
     Formatea un mensaje atractivo con las tasas
@@ -104,9 +74,6 @@ def formatear_mensaje_tasas(datos_api: Dict) -> str:
     hora_utc = datos_api.get('hour', 0)
     minutos_utc = datos_api.get('minutes', 0)
     segundos_utc = datos_api.get('seconds', 0)
-    
-    # Convertir a hora de Cuba
-    hora_cuba = convertir_a_hora_cuba(hora_utc, minutos_utc, segundos_utc)
     
     # Crear mensaje formateado
     mensaje = "💹 *TASAS ACTUALIZADAS*\n\n"
@@ -129,8 +96,7 @@ def formatear_mensaje_tasas(datos_api: Dict) -> str:
     
     mensaje += "└───────────────────────┘\n\n"
     mensaje += f"📅 *Fecha:* `{fecha}`\n"
-    mensaje += f"⏰ *Hora Cuba:* `{hora_cuba}`\n"
-    mensaje += f"🕒 *Hora UTC:* `{hora_utc:02d}:{minutos_utc:02d}:{segundos_utc:02d}`\n\n"
+    mensaje += f"🕒 *Hora de Actualización:* `{hora_utc:02d}:{minutos_utc:02d}:{segundos_utc:02d}`\n\n"
     mensaje += "💡 _Datos proporcionados por eltoque.com_"
     
     return mensaje
@@ -242,7 +208,7 @@ if __name__ == '__main__':
     print("🤖 Bot de Tasas iniciado...")
     print(f"📍 Grupos autorizados: {len(GRUPOS_AUTORIZADOS)}")
     print("📊 Comando /tasas disponible")
-    print("⏰ Obteniendo tasas de los últimos 5 minutos...")
+    print("⏰ Obteniendo tasas de los últimos 5 minutos en hora Cuba...")
     
     try:
         bot.polling(none_stop=True, interval=1, timeout=60)

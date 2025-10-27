@@ -93,12 +93,13 @@ def formatear_mensaje_tasas(datos_api: Dict) -> str:
     
     # Lista de tasas en orden específico
     tasas_ordenadas = [
-        ("USD", "💵 Dólar Americano"),
-        ("USDT_TRC20", "🔷 USDT (TRC20)"),
+        ("ECU", "💶 EUR"),
+        ("USD", "💵 USD"),
         ("MLC", "💳 MLC"),
-        ("BTC", "₿ Bitcoin"),
-        ("EUR", "Euro"),
-        ("TRX", "⚡ Tron")
+        ("USDT_TRC20", "🔷 USDT"),
+        ("TRX", "⚡ TRX")
+       
+        
     ]
     
     for codigo, nombre in tasas_ordenadas:
@@ -108,9 +109,8 @@ def formatear_mensaje_tasas(datos_api: Dict) -> str:
     
     mensaje += "└───────────────────────┘\n\n"
     mensaje += f"📅 *Fecha:* {fecha}\n"
-    mensaje += f"🕒 *Hora de actualización:* {hora_cuba} (Hora de Cuba)\n"
     mensaje += f"⏰ *Hora UTC:* {hora_utc:02d}:{minutos_utc:02d}:{segundos_utc:02d}\n\n"
-    mensaje += "💡 _Datos proporcionados por ElToque_"
+    mensaje += "💡 _Datos proporcionados por eltoque.com"
     
     return mensaje
 
@@ -125,21 +125,14 @@ def es_grupo_autorizado(chat_id: int) -> bool:
 def comando_start(message):
     if message.chat.type in ['group', 'supergroup']:
         if not es_grupo_autorizado(message.chat.id):
-            bot.reply_to(message, "❌ Este grupo no está autorizado para usar este bot.")
+            bot.reply_to(message, "❌ Este grupo no está autorizado para usar este bot. Por Favor contacte con @Alex_GlezRM")
             return
     
     welcome_text = """
 🤖 *Bot de Tasas de Cambio*
-
-*Comandos disponibles:*
-/tasas - Muestra las tasas de cambio actuales
-/grupos - Información sobre grupos autorizados
-/help - Muestra esta ayuda
-
 *Funcionalidades:*
 • Tasas en tiempo real desde ElToque
-• Conversión automática a hora de Cuba
-• Formato interactivo y fácil de leer
+• Integración a grupos por petición
     """
     bot.reply_to(message, welcome_text, parse_mode='Markdown')
 
@@ -148,7 +141,7 @@ def comando_tasas(message):
     # Verificar autorización para grupos
     if message.chat.type in ['group', 'supergroup']:
         if not es_grupo_autorizado(message.chat.id):
-            bot.reply_to(message, "❌ Este grupo no está autorizado para usar este bot.")
+            bot.reply_to(message, "❌ Este grupo no está autorizado para usar este bot. Por Favor contacte con @Alex_GlezRM")
             return
     
     # Enviar mensaje de "escribiendo..."
@@ -165,14 +158,11 @@ def comando_grupos(message):
     if message.chat.type == 'private':
         info_grupos = """
 👥 *Grupos Autorizados:*
-
-El bot puede ser agregado a los siguientes grupos:
-{}
         
 *Para agregar el bot a tu grupo:*
-1. Añade @{} como administrador
+1. Añade @elToqueP_bot como administrador
 2. Asegúrate de que tenga permisos para enviar mensajes
-3. El bot debe estar en la lista de grupos autorizados
+3. Contactar a @Alex_GlezRM para añadir tu grupo
 
 *Contacta al administrador para solicitar acceso.*
         """.format(
@@ -197,8 +187,6 @@ def comando_help(message):
 *Características:*
 • Tasas en tiempo real
 • Actualizaciones frecuentes
-• Formato claro y organizado
-• Compatible con grupos autorizados
 
 *Soporte:* Contacta al administrador para problemas o sugerencias.
     """

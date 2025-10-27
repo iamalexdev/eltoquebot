@@ -195,7 +195,7 @@ def comando_imagen(message):
 
 @bot.message_handler(commands=['link'])
 def comando_link(message):
-    global IMAGEN_PERSONALIZADA_URL  # Declarar como global aquí
+      # Declarar como global aquí
     # Verificar autorización para grupos
     if message.chat.type in ['group', 'supergroup']:
         if not es_grupo_autorizado(message.chat.id):
@@ -211,6 +211,7 @@ def comando_link(message):
     texto = message.text.strip()
     
     if texto == '/link':
+        global IMAGEN_PERSONALIZADA_URL
         # Mostrar el link actual
         bot.reply_to(message, f"🔗 *Link actual de la imagen:*\n`{IMAGEN_PERSONALIZADA_URL}`\n\nPara cambiarlo, usa: `/link https://tu-imagen.com/imagen.png`", parse_mode='Markdown')
         return

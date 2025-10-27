@@ -84,6 +84,7 @@ def formatear_mensaje_tasas(datos_api: Dict) -> str:
     tasas_ordenadas = [
         ("ECU", "💶 EUR"),
         ("USD", "💵 USD"),
+        ("BTC", "BTC"),
         ("MLC", "💳 MLC"),
         ("USDT_TRC20", "🔷 USDT"),
         ("TRX", "⚡ TRX")

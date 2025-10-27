@@ -103,7 +103,6 @@ def comando_start(message):
             return
     
     welcome_text = """
-welcome_text = """
 💹 *BOT DE TASAS DE CAMBIO* 🤖
 
 *🎮 COMANDOS PRINCIPALES:*
@@ -117,7 +116,6 @@ welcome_text = """
 ✅ Acceso controlado por grupos
 
 🚀 *¡Usa /tasas para ver las tasas ahora!*
-"""
     """
     bot.reply_to(message, welcome_text, parse_mode='Markdown')
 

@@ -123,8 +123,10 @@ def comando_start(message):
 ✅ Tasas via eltoque.com
 ✅ Actualizaciones en tiempo real
 ✅ Acceso controlado por grupos
+✅ Imagen del TRMI
 
 🚀 *¡Usa /tasas para ver las tasas ahora!*
+🖼️ *¡Usa /imagen para obtener la imagen del TRMI!*
 
 _By Alex Gonzalez_
     """
@@ -146,6 +148,32 @@ def comando_tasas(message):
     mensaje = formatear_mensaje_tasas(datos)
     
     bot.reply_to(message, mensaje, parse_mode='Markdown')
+
+@bot.message_handler(commands=['imagen'])
+def comando_imagen(message):
+    # Verificar autorización para grupos
+    if message.chat.type in ['group', 'supergroup']:
+        if not es_grupo_autorizado(message.chat.id):
+            bot.reply_to(message, "❌ Este grupo no está autorizado para usar este bot.")
+            return
+    
+    # URL de la imagen del TRMI
+    imagen_url = "https://wa.cambiocuba.money/trmi_movil.png"
+    
+    # Mensaje de respuesta
+    mensaje_respuesta = "🖼️ ¡Por supuesto! Aquí tienes tu imagen del TRMI:"
+    
+    # Enviar mensaje de texto
+    bot.reply_to(message, mensaje_respuesta)
+    
+    # Enviar la imagen
+    try:
+        bot.send_photo(message.chat.id, imagen_url, caption="📊 TRMI - Tasas de Cambio")
+        print(f"✅ Imagen TRMI enviada a {message.chat.id}")
+    except Exception as e:
+        error_msg = "❌ No se pudo enviar la imagen en este momento. Intenta nuevamente."
+        bot.reply_to(message, error_msg)
+        print(f"❌ Error al enviar imagen: {e}")
 
 @bot.message_handler(commands=['agregar'])
 def comando_grupos(message):
@@ -171,11 +199,13 @@ def comando_help(message):
 *Comandos disponibles:*
 /start - Iniciar el bot
 /tasas - Obtener tasas de cambio actuales
-/agregar - Agregalo a tu grupo
+/imagen - Obtener la imagen del TRMI
+/agregar - Agregar a tu grupo
 /help - Mostrar esta ayuda
 
 *Características:*
 • Tasas en tiempo real
+• Imagen del TRMI
 • Actualizaciones frecuentes
 • Formato claro y organizado
 • Compatible con grupos autorizados
@@ -193,7 +223,9 @@ def nuevo_miembro(message):
                 welcome_msg = """
 ¡Hola! 🤖 Gracias por agregarme al grupo.
 
-Puedes usar el comando /tasas para obtener las tasas de cambio actualizadas.
+Puedes usar:
+/tasas - Para obtener las tasas actualizadas
+/imagen - Para obtener la imagen del TRMI
 
 Usa /help para ver todos los comandos disponibles.
                 """
@@ -208,6 +240,7 @@ if __name__ == '__main__':
     print("🤖 Bot de Tasas iniciado...")
     print(f"📍 Grupos autorizados: {len(GRUPOS_AUTORIZADOS)}")
     print("📊 Comando /tasas disponible")
+    print("🖼️ Comando /imagen disponible")
     print("⏰ Obteniendo tasas de los últimos 5 minutos en hora Cuba...")
     
     try:

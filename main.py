@@ -133,11 +133,11 @@ def comando_grupos(message):
         info_grupos = """
        
 *Para agregar el bot a tu grupo:*
-1. Añade @{} como administrador
+1. Añade @elToqueP_bot como administrador
 2. Asegúrate de que tenga permisos para enviar mensajes
 3. El bot debe estar en la lista de grupos autorizados
 
-*Contacta al administrador para solicitar acceso.*
+*Contacta al administrador para solicitar acceso. @Alex_GlezRM*
         """.format(
             "\n".join([f"• Grupo {i+1}" for i in range(len(GRUPOS_AUTORIZADOS))]),
             bot.get_me().username

@@ -158,7 +158,7 @@ def comando_imagen(message):
             return
     
     # URL de la imagen del TRMI
-    imagen_url = "https://wa.cambiocuba.money/trmi_movil.png"
+    imagen_url = "https://wa.cambiocuba.money/trmi.png"
     
     # Mensaje de respuesta
     mensaje_respuesta = "🖼️ ¡Por supuesto! Aquí tienes tu imagen del TRMI:"

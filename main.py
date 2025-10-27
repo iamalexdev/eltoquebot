@@ -1,6 +1,6 @@
 import telebot
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import pytz
 from typing import Dict, List
 
@@ -21,8 +21,8 @@ def obtener_tasas_eltoque() -> Dict:
     Obtiene las tasas actuales desde la API de ElToque (últimos 5 minutos)
     """
     try:
-        # Obtener hora actual
-        ahora = datetime.now()
+        # Obtener hora actual con timezone awareness
+        ahora = datetime.now(timezone.utc)
         
         # Calcular rango de 5 minutos (desde 5 minutos antes hasta 1 minuto antes)
         fecha_hasta = ahora - timedelta(minutes=1)  # Hasta 1 minuto antes
@@ -65,21 +65,29 @@ def convertir_a_hora_cuba(utc_hour: int, utc_minutes: int, utc_seconds: int) -> 
     Convierte hora UTC a hora de Cuba (Cuba Standard Time - UTC-5)
     """
     try:
-        # Crear objeto datetime en UTC
-        utc_time = datetime.utcnow().replace(
+        # Obtener la fecha y hora actual en UTC (timezone-aware)
+        ahora_utc = datetime.now(timezone.utc)
+        
+        # Crear objeto datetime en UTC con la hora específica
+        utc_time = ahora_utc.replace(
             hour=utc_hour, 
             minute=utc_minutes, 
-            second=utc_seconds
+            second=utc_seconds,
+            microsecond=0
         )
+        
+        # Asegurarnos de que tiene timezone UTC
+        if utc_time.tzinfo is None:
+            utc_time = utc_time.replace(tzinfo=timezone.utc)
         
         # Definir timezone de Cuba
         cuba_tz = pytz.timezone('America/Havana')
         
-        # Asumir que la hora de la API es UTC y convertir a Cuba
-        utc_time = pytz.utc.localize(utc_time)
+        # Convertir UTC a hora de Cuba
         cuba_time = utc_time.astimezone(cuba_tz)
         
         return cuba_time.strftime("%H:%M:%S")
+        
     except Exception as e:
         print(f"⚠️ Error en conversión horaria: {e}")
         return f"{utc_hour:02d}:{utc_minutes:02d}:{utc_seconds:02d} (UTC)"

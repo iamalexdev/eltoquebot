@@ -18,16 +18,19 @@ bot = telebot.TeleBot(TOKEN)
 
 def obtener_tasas_eltoque() -> Dict:
     """
-    Obtiene las tasas actuales desde la API de ElToque (últimos 3 minutos)
+    Obtiene las tasas actuales desde la API de ElToque (últimos 5 minutos)
     """
     try:
-        # Preparar fechas (últimos 3 minutos)
-        fecha_actual = datetime.now()
-        fecha_desde = fecha_actual - timedelta(minutes=3)
+        # Obtener hora actual
+        ahora = datetime.now()
+        
+        # Calcular rango de 5 minutos (desde 5 minutos antes hasta 1 minuto antes)
+        fecha_hasta = ahora - timedelta(minutes=1)  # Hasta 1 minuto antes
+        fecha_desde = ahora - timedelta(minutes=5)  # Desde 5 minutos antes
         
         # Formatear fechas para la API
         date_from = fecha_desde.strftime("%Y-%m-%d %H:%M:%S").replace(" ", "%20")
-        date_to = fecha_actual.strftime("%Y-%m-%d %H:%M:%S").replace(" ", "%20")
+        date_to = fecha_hasta.strftime("%Y-%m-%d %H:%M:%S").replace(" ", "%20")
         
         url = f"https://tasas.eltoque.com/v1/trmi?date_from={date_from}&date_to={date_to}"
         
@@ -36,13 +39,18 @@ def obtener_tasas_eltoque() -> Dict:
             'Authorization': f'Bearer {API_TOKEN}'
         }
         
-        print(f"🔍 Solicitando tasas desde: {fecha_desde} hasta: {fecha_actual}")
+        print(f"🔍 Consultando API:")
+        print(f"   Desde: {fecha_desde.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"   Hasta: {fecha_hasta.strftime('%Y-%m-%d %H:%M:%S')}")
         
         response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
         
         datos = response.json()
-        print(f"✅ Datos obtenidos: {datos}")
+        print(f"✅ Datos obtenidos correctamente")
+        print(f"   Fecha en datos: {datos.get('date')}")
+        print(f"   Hora en datos: {datos.get('hour')}:{datos.get('minutes')}:{datos.get('seconds')}")
+        
         return datos
         
     except requests.exceptions.RequestException as e:
@@ -139,7 +147,7 @@ def comando_start(message):
 *✨ FUNCIONALIDADES:*
 
 ✅ Tasas via eltoque.com
-✅ Actualizaciones frecuentes
+✅ Actualizaciones en tiempo real
 ✅ Acceso controlado por grupos
 
 🚀 *¡Usa /tasas para ver las tasas ahora!*
@@ -226,7 +234,7 @@ if __name__ == '__main__':
     print("🤖 Bot de Tasas iniciado...")
     print(f"📍 Grupos autorizados: {len(GRUPOS_AUTORIZADOS)}")
     print("📊 Comando /tasas disponible")
-    print("⏰ Obteniendo tasas de los últimos 3 minutos...")
+    print("⏰ Obteniendo tasas de los últimos 5 minutos...")
     
     try:
         bot.polling(none_stop=True, interval=1, timeout=60)

@@ -92,12 +92,12 @@ def formatear_mensaje_tasas(datos_api: Dict) -> str:
     
     # Lista de tasas en orden específico
     tasas_ordenadas = [
-        ("USD", "💵 Dólar Americano"),
-        ("USDT_TRC20", "🔷 USDT (TRC20)"),
+        ("USD", "💵USD"),
+        ("USDT_TRC20", "🔷 USDT"),
         ("MLC", "💳 MLC"),
-        ("BTC", "₿ Bitcoin"),
-        ("ECU", "🇨🇺 Peso Cubano"),
-        ("TRX", "⚡ Tron")
+        ("BTC", "₿ BTC"),
+        ("ECU", "🇨🇺 EUR"),
+        ("TRX", "⚡ TRX")
     ]
     
     for codigo, nombre in tasas_ordenadas:
@@ -107,8 +107,7 @@ def formatear_mensaje_tasas(datos_api: Dict) -> str:
     
     mensaje += "└───────────────────────┘\n\n"
     mensaje += f"📅 *Fecha:* {fecha}\n"
-    mensaje += f"🕒 *Hora de actualización:* {hora_cuba} (Hora de Cuba)\n"
-    mensaje += f"⏰ *Hora UTC:* {hora_utc:02d}:{minutos_utc:02d}:{segundos_utc:02d}\n\n"
+    mensaje += f"⏰ *Hora de Actualización:* {hora_utc:02d}:{minutos_utc:02d}:{segundos_utc:02d}\n\n"
     mensaje += "💡 _Datos proporcionados por ElToque_"
     
     return mensaje

@@ -160,12 +160,6 @@ def comando_imagen(message):
     # URL de la imagen del TRMI
     imagen_url = "https://t.me/abcdefghijkllllls/2"
     
-    # Mensaje de respuesta
-    mensaje_respuesta = "🖼️ ¡Por supuesto! Aquí tienes tu imagen del TRMI:"
-    
-    # Enviar mensaje de texto
-    bot.reply_to(message, mensaje_respuesta)
-    
     # Enviar la imagen
     try:
         bot.send_photo(message.chat.id, imagen_url, caption="📊 TRMI - Tasas de Cambio")

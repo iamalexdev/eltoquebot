@@ -13,7 +13,7 @@ API_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MT
 
 # Lista de grupos autorizados
 GRUPOS_AUTORIZADOS = [
-    -4958319706,
+    -1003226018534,
 ]
 
 # Variable global para almacenar la URL personalizada de la imagen
